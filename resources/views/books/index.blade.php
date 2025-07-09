@@ -100,10 +100,11 @@
         {{-- Tombol Peminjaman Buku --}}
         @auth
             @if (auth()->user()->role === 'anggota')
-                <div
-                    class="sticky-bottom-bar bg-white border-top py-3 px-3 shadow-sm d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted mb-0" id="selectedCount">0 buku dipilih</small>
-                    <button type="submit" class="btn btn-success">Ajukan Peminjaman Buku</button>
+                <div class="loan-action-floating">
+                    <span id="selectedCount" class="text-muted small mb-2">0 buku dipilih</span>
+                    <button type="submit" class="btn btn-success btn-sm shadow-sm px-3">
+                        Ajukan Peminjaman
+                    </button>
                 </div>
                 </form>
             @endif
@@ -194,6 +195,21 @@
 
         .btn {
             transition: all 0.2s ease-in-out;
+        }
+
+        .loan-action-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            z-index: 1050;
         }
     </style>
 @endpush
