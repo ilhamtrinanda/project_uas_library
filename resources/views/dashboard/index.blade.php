@@ -74,6 +74,15 @@
             </div>
         </div>
 
+        {{-- Form Pencarian --}}
+        <form action="{{ route('dashboard') }}" method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Cari judul buku..."
+                    value="{{ request('search') }}">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Cari</button>
+            </div>
+        </form>
+
         {{-- Buku Terbaru --}}
         <div class="card shadow-sm mb-4 border-0 book-slider-card">
             <div class="card-body position-relative">
@@ -82,7 +91,12 @@
                 </h5>
 
                 @if ($latestBooks->isEmpty())
-                    <p class="text-muted">Belum ada buku yang ditambahkan.</p>
+                    @if (request('search'))
+                        <p class="text-muted">Tidak ditemukan buku dengan judul <strong>{{ request('search') }}</strong>.
+                        </p>
+                    @else
+                        <p class="text-muted">Belum ada buku yang ditambahkan.</p>
+                    @endif
                 @else
                     <div class="position-relative">
                         {{-- Panah kiri --}}
