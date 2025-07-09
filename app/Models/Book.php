@@ -40,4 +40,9 @@ class Book extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+
+    public function isFavoritedBy($user)
+    {
+        return $user ? $this->favorites()->where('user_id', $user->id)->exists() : false;
+    }
 }

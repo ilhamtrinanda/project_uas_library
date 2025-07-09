@@ -50,7 +50,15 @@
                             <div class="col-md-8">
                                 <div class="card-body d-flex flex-column justify-content-between h-100">
                                     <div>
-                                        <h5 class="card-title mb-1">{{ $book->title }}</h5>
+                                        <h5 class="card-title mb-1 d-flex align-items-center justify-content-between">
+                                            <span>{{ $book->title }}</span>
+
+                                            @auth
+                                                <i class="bi {{ $book->isFavoritedBy(auth()->user()) ? 'bi-star-fill text-warning' : 'bi-star text-secondary' }} ms-2"
+                                                    title="Favorit"></i>
+                                            @endauth
+                                        </h5>
+
                                         <p class="card-text mb-1 text-muted"><strong>Penulis:</strong> {{ $book->author }}
                                         </p>
                                         <p class="card-text mb-1 text-muted"><strong>Kategori:</strong>
@@ -59,12 +67,13 @@
                                     </div>
 
                                     <div class="mt-3 d-flex flex-wrap gap-2 align-items-center">
-                                        <a href="{{ route('books.show', $book) }}"
-                                            class="btn btn-sm btn-outline-secondary detail-btn">Lihat Detail</a>
+                                        <a href="{{ route('books.show', $book) }}" class="btn btn-sm btn-detail">
+                                            Lihat Detail
+                                        </a>
 
                                         @auth
                                             @if (auth()->user()->role === 'anggota' && $book->stock > 0)
-                                                <label class="select-book-label">
+                                                <label class="btn btn-sm btn-pilih">
                                                     <input type="checkbox" name="book_ids[]" value="{{ $book->id }}"
                                                         onchange="updateSelectedCount()" class="form-check-input me-2">
                                                     Pilih Buku
@@ -210,6 +219,19 @@
             flex-direction: column;
             align-items: end;
             z-index: 1050;
+        }
+
+        .btn-detail {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            font-weight: 500;
+            border: 1px solid #bbdefb;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-detail:hover {
+            background-color: #bbdefb;
+            color: #0b3c91;
         }
     </style>
 @endpush
