@@ -24,6 +24,7 @@ class ProfileController extends Controller
             'name'  => 'required|string|max:100',
             'email' => 'required|email|unique:ilham_users,email,' . $user->id,
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
 
         $user->name = $request->name;
@@ -39,6 +40,11 @@ class ProfileController extends Controller
             $file->storeAs('covers', $filename, 'public');
 
             $user->photo = $filename;
+        }
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
         }
 
         $user->save();
