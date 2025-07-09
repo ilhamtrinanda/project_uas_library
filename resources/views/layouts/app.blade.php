@@ -99,6 +99,21 @@
                 /* Teks putih */
                 font-size: 0.9rem;
             }
+
+            .btn-logout {
+                background-color: #FF7043;
+                border: none;
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-weight: 500;
+                transition: background-color 0.2s ease, transform 0.2s ease;
+            }
+
+            .btn-logout:hover {
+                background-color: #F4511E;
+                transform: scale(1.05);
+            }
         </style>
 
     </head>
@@ -106,14 +121,14 @@
     <body>
 
         {{-- Navbar --}}
-        <nav class="navbar navbar-expand-lg" style="background-color: #fde4b3; min-height: 60px; overflow: hidden;">
+        <nav class="navbar navbar-expand-lg navbar-custom shadow-sm" style="min-height: 60px;">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center gap-2 text-dark fw-bold position-relative"
-                    href="{{ route('dashboard') }}">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('dashboard') }}">
                     <img src="{{ asset('storage/covers/library.png') }}" alt="Logo Perpustakaan"
-                        style="height: 70px; width: auto; object-fit: contain; margin-top: -10px;">
-                    <span class="fs-4">Perpustakaan Mini</span>
+                        style="height: 50px; width: auto; object-fit: contain;">
+                    <span class="fs-5 fw-bold">Perpustakaan Mini</span>
                 </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -122,38 +137,38 @@
                     <ul class="navbar-nav ms-auto align-items-center gap-2">
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link text-dark {{ request()->routeIs('dashboard') ? 'fw-bold' : 'fw-semibold' }}"
+                                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                                     href="{{ route('dashboard') }}">
-                                    <i class="bi bi-house-door me-1"></i> Dashboard
+                                    Home
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark {{ request()->routeIs('books.*') ? 'fw-bold' : 'fw-semibold' }}"
+                                <a class="nav-link {{ request()->routeIs('books.*') ? 'active' : '' }}"
                                     href="{{ route('books.index') }}">
-                                    <i class="bi bi-journal-text me-1"></i> Daftar Buku
+                                    Daftar Buku
                                 </a>
                             </li>
 
                             @if (auth()->user()->role === 'anggota')
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark {{ request()->routeIs('favorites.*') ? 'fw-bold' : 'fw-semibold' }}"
+                                    <a class="nav-link {{ request()->routeIs('favorites.*') ? 'active' : '' }}"
                                         href="{{ route('favorites.index') }}">
-                                        <i class="bi bi-star me-1"></i> Favorit
+                                        Favorit
                                     </a>
                                 </li>
                             @endif
 
                             @if (in_array(auth()->user()->role, ['admin', 'petugas']))
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark {{ request()->routeIs('loans.*') ? 'fw-bold' : 'fw-semibold' }}"
+                                    <a class="nav-link {{ request()->routeIs('loans.*') ? 'active' : '' }}"
                                         href="{{ route('loans.index') }}">
-                                        <i class="bi bi-bookmark-check me-1"></i> Peminjaman
+                                        Peminjaman
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark {{ request()->routeIs('users.*') ? 'fw-bold' : 'fw-semibold' }}"
+                                    <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                                         href="{{ route('users.index') }}">
-                                        <i class="bi bi-people me-1"></i> Anggota
+                                        Anggota
                                     </a>
                                 </li>
                             @endif
@@ -161,12 +176,11 @@
                             <li class="nav-item">
                                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm px-3 fw-bold ms-2">
+                                    <button type="submit" class="btn btn-sm btn-logout ms-2">
                                         Logout
                                     </button>
                                 </form>
                             </li>
-
                         @endauth
 
                         @guest
