@@ -62,7 +62,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class, // ← HARUS seperti ini
+            'model' => App\Models\User::class, 
         ],
 
         // 'users' => [

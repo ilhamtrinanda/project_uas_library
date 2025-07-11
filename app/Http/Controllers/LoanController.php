@@ -18,9 +18,24 @@ class LoanController extends Controller
     // Tampilkan semua data peminjaman
     public function index()
     {
-        $loans = Loan::with(['user', 'processedBy'])->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($user->role === 'anggota') {
+            $loans = $user->loans()
+                ->with(['books', 'processedBy'])
+                ->orderByDesc('loan_date')
+                ->get();
+        } else {
+            $loans = Loan::with(['user', 'books', 'processedBy'])
+                ->orderByDesc('loan_date')
+                ->get();
+        }
+
         return view('loans.index', compact('loans'));
     }
+
+
 
     // Form peminjaman baru
     public function create()
@@ -40,7 +55,7 @@ class LoanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id'     => 'required|exists:users,id',
+            'user_id'     => 'required|exists:ilham_users,id',
             'loan_date'   => 'required|date',
             'return_date' => 'required|date|after_or_equal:loan_date',
             'books'       => 'required|array|min:1',
@@ -164,10 +179,14 @@ class LoanController extends Controller
 
     public function returnLoan(Loan $loan)
     {
-        if (!in_array(Auth::user()->role, ['admin', 'petugas'])) {
-            abort(403, 'Anda tidak memiliki izin.');
+        $user = Auth::user();
+
+        // Jika anggota, hanya boleh mengembalikan pinjamannya sendiri
+        if ($user->role === 'anggota' && $loan->user_id !== $user->id) {
+            abort(403, 'Anda tidak bisa mengembalikan pinjaman orang lain.');
         }
 
+        // Pastikan statusnya 'dipinjam'
         if ($loan->status !== 'dipinjam') {
             return back()->with('error', 'Peminjaman belum dalam status dipinjam.');
         }
@@ -176,13 +195,14 @@ class LoanController extends Controller
             'status' => 'dikembalikan',
         ]);
 
-        // Tambah stok kembali
+        // Kembalikan stok buku
         foreach ($loan->books as $book) {
             $book->increment('stock', $book->pivot->qty);
         }
 
         return back()->with('success', 'Buku berhasil dikembalikan.');
     }
+
 
     public function requestMultiple(Request $request)
     {

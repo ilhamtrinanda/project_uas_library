@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/loans/request', [LoanController::class, 'requestLoan'])->name('loans.request');
     Route::patch('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
     Route::patch('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
-    Route::put('/loans/{loan}/return', [LoanController::class, 'returnLoan'])->name('loans.return');
+    Route::post('/loans/{loan}/return', [LoanController::class, 'returnLoan'])->name('loans.return');
     Route::post('/loans/request-multiple', [App\Http\Controllers\LoanController::class, 'requestMultiple'])->name('loans.requestMultiple');
 });
 

@@ -148,6 +148,14 @@
                                     Daftar Buku
                                 </a>
                             </li>
+                            @if (auth()->user()->role === 'anggota')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('loans.index') ? 'active' : '' }}"
+                                        href="{{ route('loans.index') }}">
+                                        Peminjaman
+                                    </a>
+                                </li>
+                            @endif
 
                             @if (auth()->user()->role === 'anggota')
                                 <li class="nav-item">
