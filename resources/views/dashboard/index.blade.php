@@ -12,21 +12,25 @@
 
         {{-- Profil Anggota (Khusus Role: anggota) --}}
         @auth
-            @if (auth()->user()->role === 'anggota')
-                <div class="card mb-4 shadow-sm border-0">
-                    <div class="card-body d-flex align-items-center">
-                        <img src="{{ auth()->user()->photo_url }}" alt="Profil" class="rounded-circle me-3"
-                            style="width: 60px; height: 60px; object-fit: cover;">
-                        <div>
-                            <h5 class="mb-1">{{ auth()->user()->name }}</h5>
-                            <p class="mb-0 text-muted small">{{ auth()->user()->email }}</p>
-                            <p class="mb-0 text-muted small">Terdaftar sejak: {{ auth()->user()->created_at->format('d M Y') }}
-                            </p>
-                            <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-primary mt-2">Edit Profil</a>
+            {{-- Profil Pengguna --}}
+            @auth
+                @if (in_array(auth()->user()->role, ['anggota', 'admin', 'petugas']))
+                    <div class="card mb-4 shadow-sm border-0">
+                        <div class="card-body d-flex align-items-center">
+                            <img src="{{ auth()->user()->photo_url }}" alt="Profil" class="rounded-circle me-3"
+                                style="width: 60px; height: 60px; object-fit: cover;">
+                            <div>
+                                <h5 class="mb-1">{{ auth()->user()->name }}</h5>
+                                <p class="mb-0 text-muted small">{{ auth()->user()->email }}</p>
+                                <p class="mb-0 text-muted small">Terdaftar sejak: {{ auth()->user()->created_at->format('d M Y') }}
+                                </p>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-primary mt-2">Edit Profil</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            @endauth
+
         @endauth
 
         {{-- Kartu Statistik --}}

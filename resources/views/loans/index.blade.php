@@ -4,17 +4,37 @@
     <div class="container my-4">
         <div class="card shadow rounded-4 border-0">
             <div class="card-header bg-white border-bottom-0 rounded-top-4 px-4 py-3">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h4 class="mb-0 fw-bold">Daftar Peminjaman</h4>
-                    <a href="{{ route('loans.create') }}" class="btn btn-primary btn-sm fw-semibold">Tambah Peminjaman</a>
+                    @if (auth()->user()->role === 'anggota')
+                        <a href="{{ route('loans.create') }}" class="btn btn-sm btn-success fw-semibold">Tambah Peminjaman</a>
+                    @endif
                 </div>
             </div>
 
             <div class="card-body p-4">
+
+                {{-- Alert --}}
                 @if (session('success'))
                     <div class="alert alert-success mb-4">{{ session('success') }}</div>
                 @endif
 
+                {{-- Form Pencarian --}}
+                <form method="GET" action="{{ route('loans.index') }}" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control"
+                            placeholder="Cari nama, email, judul buku, atau penulis..." value="{{ request('search') }}">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Cari</button>
+                    </div>
+                </form>
+
+                @if (request('search'))
+                    <div class="small text-muted mb-3">
+                        Ditemukan {{ $loans->count() }} hasil untuk: <strong>{{ request('search') }}</strong>
+                    </div>
+                @endif
+
+                {{-- Tabel --}}
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover align-middle small text-center">
                         <thead class="table-light">
@@ -71,30 +91,28 @@
                                                     class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm"
-                                                        style="background-color: #3F51B5; color: white;">Setujui</button>
+                                                    <button type="submit" class="btn btn-sm btn-dark">Setujui</button>
                                                 </form>
                                                 <form action="{{ route('loans.reject', $loan->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm text-white"
-                                                        style="background-color: #B0BEC5;">Tolak</button>
+                                                    <button type="submit" class="btn btn-sm btn-secondary">Tolak</button>
                                                 </form>
                                             @endif
 
                                             @if ($loan->status === 'dipinjam')
                                                 <form action="{{ route('loans.return', $loan->id) }}" method="POST"
-                                                    onsubmit="return confirm('Yakin buku sudah dikembalikan?')"
-                                                    class="d-inline">
+                                                    class="d-inline"
+                                                    onsubmit="return confirm('Yakin buku sudah dikembalikan?')">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm"
-                                                        style="background-color: #3fb570; color: white;">Kembalikan</button>
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-success">Kembalikan</button>
                                                 </form>
                                             @endif
 
-                                            <a href="{{ route('loans.edit', $loan) }}" class="btn btn-sm"
-                                                style="background-color: #3F51B5; color: white;">Edit</a>
+                                            <a href="{{ route('loans.edit', $loan) }}"
+                                                class="btn btn-sm btn-primary">Edit</a>
 
                                             <form action="{{ route('loans.destroy', $loan) }}" method="POST"
                                                 class="d-inline" onsubmit="return confirm('Hapus data ini?')">
@@ -108,8 +126,8 @@
                                                     onsubmit="return confirm('Yakin ingin mengembalikan buku ini?')"
                                                     class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm"
-                                                        style="background-color: #3F51B5; color: white;">Kembalikan</button>
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-primary">Kembalikan</button>
                                                 </form>
                                             @else
                                                 <span class="text-muted small">Tidak tersedia</span>
@@ -125,6 +143,11 @@
                         </tbody>
                     </table>
                 </div>
+
+                {{-- Pagination (jika pakai paginate) --}}
+                {{-- <div class="mt-3">
+                    {{ $loans->withQueryString()->links() }}
+                </div> --}}
             </div>
         </div>
     </div>

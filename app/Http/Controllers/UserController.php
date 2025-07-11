@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!Auth::check()) {
             abort(403, 'Anda belum login.');
@@ -19,8 +19,23 @@ class UserController extends Controller
             abort(403, 'Anggota tidak boleh melihat daftar pengguna.');
         }
 
-        $users = User::all();
-        return view('users.index', compact('users')); // gunakan view/users/index.blade.php
+        $query = User::query();
+
+        // Fitur pencarian
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Urutan berdasarkan role: admin → petugas → anggota
+        $query->orderByRaw("FIELD(role, 'admin', 'petugas', 'anggota')");
+
+        $users = $query->latest()->get();
+
+        return view('users.index', compact('users'));
     }
 
     public function create()

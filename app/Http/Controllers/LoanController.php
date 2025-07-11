@@ -16,26 +16,42 @@ class LoanController extends Controller
     }
 
     // Tampilkan semua data peminjaman
-    public function index()
+    public function index(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $search = $request->input('search');
 
         if ($user->role === 'anggota') {
+            // Peminjaman milik user itu sendiri
             $loans = $user->loans()
                 ->with(['books', 'processedBy'])
+                ->when($search, function ($query, $search) {
+                    $query->whereHas('books', function ($q) use ($search) {
+                        $q->where('title', 'like', "%$search%")
+                            ->orWhere('author', 'like', "%$search%");
+                    });
+                })
                 ->orderByDesc('loan_date')
                 ->get();
         } else {
-            $loans = Loan::with(['user', 'books', 'processedBy'])
+            // Semua peminjaman
+            $loans = \App\Models\Loan::with(['user', 'books', 'processedBy'])
+                ->when($search, function ($query, $search) {
+                    $query->whereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%")
+                            ->orWhere('email', 'like', "%$search%");
+                    })->orWhereHas('books', function ($q) use ($search) {
+                        $q->where('title', 'like', "%$search%")
+                            ->orWhere('author', 'like', "%$search%");
+                    });
+                })
                 ->orderByDesc('loan_date')
                 ->get();
         }
 
-        return view('loans.index', compact('loans'));
+        return view('loans.index', compact('loans', 'search'));
     }
-
-
 
     // Form peminjaman baru
     public function create()
