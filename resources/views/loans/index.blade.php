@@ -87,19 +87,31 @@
                                     <td class="text-center">
                                         @if (in_array(auth()->user()->role, ['admin', 'petugas']))
                                             @if ($loan->status === 'menunggu')
+                                                {{-- Tombol Setujui --}}
                                                 <form action="{{ route('loans.approve', $loan->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm btn-dark">Setujui</button>
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-outline-success rounded-circle"
+                                                        title="Setujui">
+                                                        <i class="bi bi-check-lg"></i>
+                                                    </button>
                                                 </form>
+
+                                                {{-- Tombol Tolak --}}
                                                 <form action="{{ route('loans.reject', $loan->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm btn-secondary">Tolak</button>
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger rounded-circle" title="Tolak">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
                                                 </form>
                                             @endif
+
+
 
                                             @if ($loan->status === 'dipinjam')
                                                 <form action="{{ route('loans.return', $loan->id) }}" method="POST"
