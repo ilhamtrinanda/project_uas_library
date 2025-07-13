@@ -215,8 +215,8 @@
                                 <p class="lead">Silakan login untuk meminjam dan mengelola buku favoritmu.</p>
                             </div>
                             <div class="col-md-5 offset-md-1">
-                                <div class="auth-form px-3 py-4 shadow-sm rounded-4">
-                                    <h5 class="text-center fw-semibold mb-3" style="color: #3F51B5;">Login</h5>
+                                <div class="auth-form bg-white rounded-4 shadow-lg p-4">
+                                    <h4 class="text-center mb-4 fw-bold text-primary">Login</h4>
 
                                     {{-- Flash Message --}}
                                     @if (session('error'))
@@ -237,40 +237,43 @@
                                         </div>
                                     @endif
 
-                                    {{-- Form --}}
+                                    {{-- Form Login --}}
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
 
-                                        <div class="form-floating mb-2">
-                                            <input type="email" name="email" class="form-control form-control-sm"
-                                                id="email" placeholder="Email" required autofocus>
+                                        <div class="form-floating mb-3">
+                                            <input type="email" name="email" id="email"
+                                                class="form-control rounded-3" placeholder="Email" required autofocus>
                                             <label for="email">Email</label>
                                         </div>
 
-                                        <div class="form-floating mb-2">
-                                            <input type="password" name="password" class="form-control form-control-sm"
-                                                id="password" placeholder="Password" required>
+                                        <div class="form-floating mb-3">
+                                            <input type="password" name="password" id="password"
+                                                class="form-control rounded-3" placeholder="Password" required>
                                             <label for="password">Password</label>
                                         </div>
 
                                         <div class="form-check mb-3 small">
-                                            <input type="checkbox" name="remember" class="form-check-input" id="remember">
-                                            <label class="form-check-label" for="remember">Ingat Saya</label>
+                                            <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                            <label class="form-check-label" for="remember">
+                                                Ingat Saya
+                                            </label>
                                         </div>
 
-                                        <button type="submit" class="btn btn-sm w-100 text-white fw-semibold"
-                                            style="background-color: #3F51B5;">
+                                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold rounded-pill">
                                             Login
                                         </button>
 
                                         <div class="text-center mt-3 small">
                                             Belum punya akun? <a href="{{ route('register') }}"
-                                                class="text-decoration-none" style="color: #FF7043;">Daftar</a>
+                                                class="text-decoration-none fw-semibold" style="color: #FF7043;">
+                                                Daftar sekarang
+                                            </a>
                                         </div>
                                     </form>
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
                 </div>
