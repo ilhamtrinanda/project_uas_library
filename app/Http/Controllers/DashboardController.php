@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if ($search) {
             $latestBooksQuery->where('title', 'like', '%' . $search . '%');
         }
-        $latestBooks = $latestBooksQuery->take(10)->get();
+        $latestBooks = $latestBooksQuery->get();
 
         $loans = Loan::with('books', 'user')
             ->where('status', 'dipinjam')

@@ -4,18 +4,12 @@
 
 @section('content')
     <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="card shadow-lg border-0 rounded-4 px-4 py-5"
-            style="width: 100%; max-width: 500px; background-color: #ffffff;">
-            <div class="text-center mb-4">
-                <div class="mb-2">
-                    <i class="bi bi-person-circle fs-1 text-primary"></i>
-                </div>
-                <h4 class="fw-bold text-dark">Daftar sebagai Anggota</h4>
-            </div>
+        <div class="card shadow-sm border-0 rounded-4 p-4" style="width: 100%; max-width: 480px;">
+            <h4 class="fw-bold text-center mb-4">Form Pendaftaran</h4>
 
             {{-- Notifikasi --}}
             @if (session('success'))
-                <div class="alert alert-success text-center py-2 small mb-3">
+                <div class="alert alert-success text-center small mb-3">
                     {{ session('success') }}
                 </div>
             @endif
@@ -34,25 +28,24 @@
                 @csrf
 
                 <div class="form-floating mb-3">
-                    <input type="text" name="name" id="name" class="form-control" placeholder="Nama Anda"
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Nama Lengkap"
                         required>
                     <label for="name">Nama Lengkap</label>
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="email" name="email" id="email" class="form-control" placeholder="nama@email.com"
-                        required>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
                     <label for="email">Email</label>
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="text" name="phone" id="phone" class="form-control" placeholder="08xxxxxxxxxx"
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Nomor Telepon"
                         required>
                     <label for="phone">Nomor Telepon</label>
                 </div>
 
                 <div class="form-floating mb-3">
-                    <textarea name="address" id="address" class="form-control" placeholder="Alamat lengkap" style="height: 100px;"
+                    <textarea name="address" id="address" class="form-control" placeholder="Alamat Lengkap" style="height: 100px;"
                         required></textarea>
                     <label for="address">Alamat</label>
                 </div>
@@ -70,15 +63,15 @@
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary fw-semibold shadow-sm">
-                        <i class="bi bi-person-plus me-1"></i> Daftar Sekarang
+                    <button type="submit" class="btn btn-primary fw-semibold">
+                        Daftar Sekarang
                     </button>
                 </div>
             </form>
 
             <div class="text-center mt-4 small">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-decoration-none text-primary fw-semibold">
+                <a href="{{ route('login') }}" class="text-decoration-none fw-semibold">
                     Login di sini
                 </a>
             </div>

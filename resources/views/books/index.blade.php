@@ -2,7 +2,17 @@
 
 @section('content')
     <div class="container">
-        <h3 class="mb-4">Daftar Buku</h3>
+        {{-- Header dan Tombol Tambah Buku --}}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 fw-bold">Daftar Buku</h3>
+            @auth
+                @if (auth()->user()->role === 'admin')
+                    <a href="{{ route('books.create') }}" class="btn btn-sm btn-success fw-semibold">
+                        + Tambah Buku
+                    </a>
+                @endif
+            @endauth
+        </div>
 
         {{-- Alert Sukses / Error --}}
         @foreach (['success', 'error'] as $msg)
@@ -14,13 +24,6 @@
                 </div>
             @endif
         @endforeach
-
-        {{-- Tombol Tambah Buku untuk Admin --}}
-        @auth
-            @if (auth()->user()->role === 'admin')
-                <a href="{{ route('books.create') }}" class="btn btn-primary mb-4">+ Tambah Buku</a>
-            @endif
-        @endauth
 
         {{-- Form untuk Peminjaman oleh Anggota --}}
         @auth
@@ -50,15 +53,7 @@
                             <div class="col-md-8">
                                 <div class="card-body d-flex flex-column justify-content-between h-100">
                                     <div>
-                                        <h5 class="card-title mb-1 d-flex align-items-center justify-content-between">
-                                            <span>{{ $book->title }}</span>
-
-                                            @auth
-                                                <i class="bi {{ $book->isFavoritedBy(auth()->user()) ? 'bi-star-fill text-warning' : 'bi-star text-secondary' }} ms-2"
-                                                    title="Favorit"></i>
-                                            @endauth
-                                        </h5>
-
+                                        <h5 class="card-title mb-1">{{ $book->title }}</h5>
                                         <p class="card-text mb-1 text-muted"><strong>Penulis:</strong> {{ $book->author }}
                                         </p>
                                         <p class="card-text mb-1 text-muted"><strong>Kategori:</strong>
@@ -73,17 +68,18 @@
 
                                         @auth
                                             @if (auth()->user()->role === 'anggota' && $book->stock > 0)
-                                                <label class="btn btn-sm btn-pilih">
+                                                <label class="book-select-card">
                                                     <input type="checkbox" name="book_ids[]" value="{{ $book->id }}"
-                                                        onchange="updateSelectedCount()" class="form-check-input me-2">
-                                                    Pilih Buku
+                                                        onchange="updateSelectedCount()" class="d-none toggle-check">
+                                                    <div class="card-toggle">
+                                                        <span class="checkmark">&#10003;</span> Pilih Buku
+                                                    </div>
                                                 </label>
                                             @endif
 
                                             @if (auth()->user()->role === 'admin')
                                                 <a href="{{ route('books.edit', $book) }}"
                                                     class="btn btn-sm btn-warning">Edit</a>
-
                                                 <form action="{{ route('books.destroy', $book) }}" method="POST"
                                                     class="d-inline"
                                                     onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
@@ -125,6 +121,7 @@
         </div>
     </div>
 @endsection
+
 
 @push('scripts')
     <script>
@@ -232,6 +229,58 @@
         .btn-detail:hover {
             background-color: #bbdefb;
             color: #0b3c91;
+        }
+
+        /* Checkbox custom style saat memilih buku */
+        input[type="checkbox"]:checked+span {
+            background-color: #d0f0c0;
+            border-color: #28a745;
+            font-weight: bold;
+            color: #155724;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+        }
+
+        /* Hover effect untuk label "Pilih Buku" */
+        .book-select-card {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-toggle {
+            padding: 6px 12px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: #f8f9fa;
+            position: relative;
+            color: #333;
+        }
+
+        .book-select-card:hover .card-toggle {
+            border-color: #999;
+            background-color: #e9ecef;
+        }
+
+        .card-toggle .checkmark {
+            display: none;
+            margin-right: 6px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .toggle-check:checked+.card-toggle {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+            font-weight: bold;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+        }
+
+        .toggle-check:checked+.card-toggle .checkmark {
+            display: inline;
         }
     </style>
 @endpush

@@ -218,25 +218,6 @@
                                 <div class="auth-form bg-white rounded-4 shadow-lg p-4">
                                     <h4 class="text-center mb-4 fw-bold text-primary">Login</h4>
 
-                                    {{-- Flash Message --}}
-                                    @if (session('error'))
-                                        <div class="alert alert-danger small">{{ session('error') }}</div>
-                                    @endif
-
-                                    @if (session('status'))
-                                        <div class="alert alert-success small">{{ session('status') }}</div>
-                                    @endif
-
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger small">
-                                            <ul class="mb-0 ps-3">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-
                                     {{-- Form Login --}}
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
@@ -260,7 +241,8 @@
                                             </label>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold rounded-pill">
+                                        <button type="submit"
+                                            class="btn btn-primary w-100 py-2 fw-semibold rounded-pill">
                                             Login
                                         </button>
 

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h3>✏️ Edit Buku</h3>
+        <h3 class="mb-4 fw-bold">Edit Data Buku</h3>
 
         <form action="{{ route('books.update', $book) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -85,7 +85,7 @@
                 @enderror
             </div>
 
-            {{-- Cover Buku --}}
+            {{-- Cover --}}
             <div class="mb-3">
                 <label for="cover" class="form-label">Ganti Cover (opsional)</label>
                 <input type="file" name="cover" class="form-control @error('cover') is-invalid @enderror"
@@ -98,13 +98,15 @@
                     <div class="mt-2">
                         <img src="{{ asset('storage/' . $book->cover) }}" alt="cover lama" class="img-thumbnail"
                             width="120">
-                        <p class="text-muted mb-0 mt-1"><small>Cover lama</small></p>
+                        <p class="text-muted mb-0 mt-1"><small>Cover lama saat ini</small></p>
                     </div>
                 @endif
             </div>
 
-            <button type="submit" class="btn btn-success">Update</button>
-            <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
+            <div class="d-flex justify-content-between">
+                <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
         </form>
     </div>
 @endsection

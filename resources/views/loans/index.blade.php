@@ -6,7 +6,7 @@
             <div class="card-header bg-white border-bottom-0 rounded-top-4 px-4 py-3">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h4 class="mb-0 fw-bold">Daftar Peminjaman</h4>
-                    @if (auth()->user()->role === 'anggota')
+                    @if (in_array(auth()->user()->role, ['admin', 'petugas', 'anggota']))
                         <a href="{{ route('loans.create') }}" class="btn btn-sm btn-success fw-semibold">Tambah Peminjaman</a>
                     @endif
                 </div>
@@ -40,8 +40,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Anggota</th>
-                                <th>Tgl Pinjam</th>
-                                <th>Tgl Kembali</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Tanggal Kembali</th>
                                 <th>Status</th>
                                 <th>Petugas</th>
                                 <th>Daftar Buku</th>
